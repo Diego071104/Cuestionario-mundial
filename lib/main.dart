@@ -244,9 +244,6 @@ void verResultados() {
   );
 }
 
-    
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -327,12 +324,12 @@ void verResultados() {
           const SizedBox(height: 10),
           ElevatedButton.icon(
             onPressed: verResultados,
-                  icon: const Icon(Icons.emoji_events),
-      label: const Text('Ver resultados'),
-    ),
-  ],
-),
-);
+            icon: const Icon(Icons.emoji_events),
+            label: const Text('Ver resultados'),
+          ),
+        ],
+      ),
+    );
   }
 }
 
