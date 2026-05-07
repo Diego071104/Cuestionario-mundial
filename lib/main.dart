@@ -173,12 +173,32 @@ class QuinielaScreen extends StatefulWidget {
 }
 
 class _QuinielaScreenState extends State<QuinielaScreen> {
-  final List<Map<String, String>> partidos = [
-    {'local': 'México', 'visitante': 'Corea'},
-    {'local': 'Estados Unidos', 'visitante': 'Paraguay'},
-    {'local': 'Argentina', 'visitante': 'Austria'},
-    {'local': 'España', 'visitante': 'Cabo Verde'},
-  ];
+ final List<Map<String, dynamic>> partidos = [
+  {
+    'local': 'México',
+    'visitante': 'Corea',
+    'golesLocalCorrecto': 2,
+    'golesVisitanteCorrecto': 1,
+  },
+  {
+    'local': 'Estados Unidos',
+    'visitante': 'Paraguay',
+    'golesLocalCorrecto': 1,
+    'golesVisitanteCorrecto': 1,
+  },
+  {
+    'local': 'Argentina',
+    'visitante': 'Austria',
+    'golesLocalCorrecto': 3,
+    'golesVisitanteCorrecto': 0,
+  },
+  {
+    'local': 'España',
+    'visitante': 'Cabo Verde',
+    'golesLocalCorrecto': 4,
+    'golesVisitanteCorrecto': 0,
+  },
+];
 
   final Map<int, TextEditingController> golesLocal = {};
   final Map<int, TextEditingController> golesVisitante = {};
@@ -193,25 +213,38 @@ class _QuinielaScreenState extends State<QuinielaScreen> {
     }
   }
 
-  void verResultados() {
-    int partidosContestados = 0;
+void verResultados() {
+  int aciertosExactos = 0;
+  int partidosContestados = 0;
 
-    for (int i = 0; i < partidos.length; i++) {
-      if (golesLocal[i]!.text.isNotEmpty && golesVisitante[i]!.text.isNotEmpty) {
-        partidosContestados++;
+  for (int i = 0; i < partidos.length; i++) {
+    final prediccionLocal = int.tryParse(golesLocal[i]!.text);
+    final prediccionVisitante = int.tryParse(golesVisitante[i]!.text);
+
+    if (prediccionLocal != null && prediccionVisitante != null) {
+      partidosContestados++;
+
+      if (prediccionLocal == partidos[i]['golesLocalCorrecto'] &&
+          prediccionVisitante == partidos[i]['golesVisitanteCorrecto']) {
+        aciertosExactos++;
       }
     }
+  }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ResultadosScreen(
-          nombre: widget.nombre,
-          partidosContestados: partidosContestados,
-          totalPartidos: partidos.length,
-        ),
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => ResultadosScreen(
+        nombre: widget.nombre,
+        partidosContestados: partidosContestados,
+        totalPartidos: partidos.length,
+        aciertosExactos: aciertosExactos,
       ),
-    );
+    ),
+  );
+}
+
+    
   }
 
   @override
@@ -294,12 +327,12 @@ class _QuinielaScreenState extends State<QuinielaScreen> {
           const SizedBox(height: 10),
           ElevatedButton.icon(
             onPressed: verResultados,
-            icon: const Icon(Icons.emoji_events),
-            label: const Text('Ver resultados'),
-          ),
-        ],
-      ),
-    );
+                  icon: const Icon(Icons.emoji_events),
+      label: const Text('Ver resultados'),
+    ),
+  ],
+),
+);
   }
 }
 
@@ -307,18 +340,20 @@ class ResultadosScreen extends StatelessWidget {
   final String nombre;
   final int partidosContestados;
   final int totalPartidos;
+  final int aciertosExactos;
 
   const ResultadosScreen({
     super.key,
     required this.nombre,
     required this.partidosContestados,
     required this.totalPartidos,
+    required this.aciertosExactos,
+
   });
 
   @override
   Widget build(BuildContext context) {
-    final int puntos = partidosContestados * 3;
-
+    final int puntos = aciertosExactos * 3;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Resultados'),
@@ -351,6 +386,11 @@ class ResultadosScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     'Partidos contestados: $partidosContestados / $totalPartidos',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Aciertos exactos: $aciertosExactos',
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 12),
