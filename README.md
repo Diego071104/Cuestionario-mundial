@@ -15,3 +15,5 @@ El codigo funciona principalmente bajo estos puntos:
 . Asi mismo condicionales if que comparan las predicciones del usuario con los resultados correctos.
 
 Finalmente cuando el usuario presiona ver resultados  la función  que se llama verResultados() procesa todas las respuestas del usuario, cuenta los aciertos exactos qure tuvo en base a los resultados "correctos"  y calcula la puntuación final de cuantos partiudos tuvo bien de los 4 donde cada uno que esta bien vale 3 puntos teniendo una calificacion maxima de 12. Por ultimo, la aplicación navega hacia una pantalla de resultados utilizando Navigator.push(), donde se muestran los datos obtenidos por el participante.
+
+link de video:https://www.youtube.com/watch?v=JJONUBSGa24
